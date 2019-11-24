@@ -1,4 +1,4 @@
-import { Model, Sequelize } from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 import bcrypt from 'bcrypt';
 
 class User extends Model {
@@ -10,9 +10,12 @@ class User extends Model {
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
       },
-      { sequelize }
+      {
+        sequelize,
+      }
     );
 
+    // Criação do hash da senha usando bcrypt
     this.addHook('beforeSave', async user => {
       if (user.password) {
         user.password_hash = await bcrypt.hash(user.password, 8);
